@@ -5,6 +5,7 @@ from gradio_client import Client
 import time
 from datetime import datetime
 from PIL import Image
+from flask_cors import CORS
 
 
 styles_prompts = {
@@ -45,7 +46,7 @@ def create_combined_image(input_image_path_1, input_image_path_2, base_image_pat
     return output_image_path
 
 def generate_image(input_image_path_1, input_image_path_2, style, gender_1, gender_2):
-    client = Client("https://instantx-instantid.hf.space/--replicas/pv5ou/")
+    client = Client("https://instantx-instantid.hf.space/--replicas/o87cp/")
     image_paths = []
     for input_image_path, reference_image_path, gender in [(input_image_path_1, "bp.png", gender_1), (input_image_path_2, "gp1.png", gender_2)]:
         while True:
@@ -96,6 +97,11 @@ def generate_image(input_image_path_1, input_image_path_2, style, gender_1, gend
 
 
 app = Flask(__name__)
+CORS(app)
+
+@app.route('/')
+def index():
+    return "Welcome to the InstantX InstantID API!"
 
 @app.route('/generate', methods=['POST'])
 def generate():
