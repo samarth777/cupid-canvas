@@ -12,10 +12,10 @@ styles_prompts = {
     "comic": "comic {prompt} . graphic illustration, comic art, graphic novel art, vibrant, highly detailed"
 }
 
-def generate_image(input_image_path_1, input_image_path_2, reference_image_path_1, reference_image_path_2, style, gender_1, gender_2):
+def generate_image(input_image_path_1, input_image_path_2, style, gender_1, gender_2):
     client = Client("https://instantx-instantid.hf.space/--replicas/pv5ou/")
     image_paths = []
-    for input_image_path, reference_image_path, gender in [(input_image_path_1, reference_image_path_1, gender_1), (input_image_path_2, reference_image_path_2, gender_2)]:
+    for input_image_path, reference_image_path, gender in [(input_image_path_1, , gender_1), (input_image_path_2, reference_image_path_2, gender_2)]:
         while True:
             try:
                 result = client.predict(
@@ -47,7 +47,7 @@ def generate_image(input_image_path_1, input_image_path_2, reference_image_path_
                     os.makedirs('static')
                 
                 # Generate a new image name
-                image_name = f"UID_{gender}.png"
+                image_name = f"UID_comic_{gender}.png"
                 
                 # Copy the image to the static directory
                 shutil.copy(image_path, f'static/{image_name}')
@@ -62,7 +62,7 @@ def generate_image(input_image_path_1, input_image_path_2, reference_image_path_
 
 start_time = time.time()
 
-result_path = generate_image("b4.png", "g1.jpeg", "bp.png", "gp1.png", "digitalart", "boy", "girl")
+result_path = generate_image("b4.png", "g3.png", "bp.png", "gp1.png", "comic", "boy", "girl")
 
 end_time = time.time()
 
