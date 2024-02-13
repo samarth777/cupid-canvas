@@ -1,13 +1,8 @@
-from flask import Flask, request, jsonify, send_from_directory
+import os
+import shutil
 from gradio_client import Client
 import time
 
-app = Flask(__name__)
-
-@app.route('/static/<filename>')
-def custom_static(filename):
-    return send_from_directory('static', filename)
-# Define the styles and their prompts
 styles_prompts = {
     "lineart": "line art drawing {prompt} . professional, sleek, modern, minimalist, graphic, line art, vector graphics",
     "anime": "anime artwork {prompt} . anime style, key visual, vibrant, studio anime, highly detailed",
@@ -17,7 +12,7 @@ styles_prompts = {
     "comic": "comic {prompt} . graphic illustration, comic art, graphic novel art, vibrant, highly detailed"
 }
 
-def generate_image(input_image_path, reference_image_path, style, gender):
+def generate_image(input_image_path_1, input_image_path_2, reference_image_path_1, reference_image_path_2, style, gender_1, gender_2):
     client = Client("https://instantx-instantid.hf.space/--replicas/pv5ou/")
     while True:
         try:
@@ -41,16 +36,26 @@ def generate_image(input_image_path, reference_image_path, style, gender):
                 True,
                 api_name="/generate_image"
             )
-            return result
+            
+            # Get the first item in the result (assumed to be the image path)
+            image_path = result[0]
+            
+            # Create a static directory if it doesn't exist
+            if not os.path.exists('static'):
+                os.makedirs('static')
+            
+            # Generate a new image name
+            image_name = f"{os.path.basename(input_image_path).split('.')[0]}.png"
+            
+            # Copy the image to the static directory
+            shutil.copy(image_path, f'static/{image_name}')
+            
+            return image_name
         except Exception as e:
             print(f"Error: {e}. Retrying...")
             time.sleep(5)
 
-@app.route('/generate', methods=['POST'])
-def generate():
-    data = request.get_json()
-    result_path = generate_image(data['input_image_path'], data['reference_image_path'], data['style'], data['gender'])
-    return jsonify({'result_path': result_path})
 
-if __name__ == '__main__':
-    app.run(debug=True)
+result_path = generate_image("b4.png", "gp1.png", "digitalart", "boy")
+print(result_path)
+
