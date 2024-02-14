@@ -46,7 +46,7 @@ def create_combined_image(input_image_path_1, input_image_path_2, base_image_pat
     return output_image_path
 
 def generate_image(input_image_path_1, input_image_path_2, style, gender_1, gender_2):
-    client = Client("https://instantx-instantid.hf.space/--replicas/o87cp/")
+    client = Client("https://instantx-instantid.hf.space/--replicas/vrdee/")
     image_paths = []
     for input_image_path, reference_image_path, gender in [(input_image_path_1, "bp.png", gender_1), (input_image_path_2, "gp1.png", gender_2)]:
         while True:
@@ -120,4 +120,4 @@ def custom_static(filename):
     return send_from_directory('static', filename)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80)
+    app.run(host='0.0.0.0', port=5000)
