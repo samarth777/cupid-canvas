@@ -137,7 +137,7 @@ function Home() {
     console.log("Sending request");
     setIsLoading(true);
     try { 
-      const response = await axios.post("http://localhost:5000/generate", {
+      const response = await axios.post("http://13.200.175.247/generate", {
         input_image_path_1: downloadURL2,
         input_image_path_2: downloadURL1,
         style: style,
@@ -145,7 +145,7 @@ function Home() {
         gender_2: "girl",
       });
       console.log(response);
-      navigate("/result?src=" + encodeURIComponent("http://localhost:5000/"+response.data.image_paths));
+      navigate("/result?src=" + encodeURIComponent("http://13.200.175.247/"+response.data.image_paths));
     } catch (error) {
       console.error("Error fetching data: ", error);
     } finally {
